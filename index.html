@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Radar de Conflitos Sociais</title>
+<meta name="description" content="Protótipo: onde a mineração e a sociedade entram em atrito em Minas Gerais e no Pará, só com dado público.">
+<meta name="theme-color" content="#F5F3EF">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css" rel="stylesheet">
+<link href="estilo.css" rel="stylesheet">
+</head>
+<body class="modo-apresentacao">
+
+<div id="mapa" aria-label="Mapa de Minas Gerais e Pará"></div>
+
+<header class="topo">
+  <div class="marca">
+    <span class="marca-sinal" aria-hidden="true"></span>
+    <span class="marca-nome">Radar de Conflitos<span class="so-largo"> Sociais</span></span>
+    <span class="marca-selo">protótipo</span>
+  </div>
+  <nav class="modos" aria-label="Modo">
+    <button type="button" data-modo="apresentacao" class="ativo">Apresentação</button>
+    <button type="button" data-modo="explorar">Explorar</button>
+  </nav>
+</header>
+
+<!-- APRESENTAÇÃO -->
+<section id="historia" class="painel painel-historia" aria-live="polite">
+  <div class="historia-progresso" aria-hidden="true"><div class="historia-barra"></div></div>
+  <div class="historia-corpo" id="historia-corpo"></div>
+  <footer class="historia-nav">
+    <button type="button" class="btn-sec" id="ant" aria-label="Passo anterior">Anterior</button>
+    <span class="historia-contador" id="contador">1 / 12</span>
+    <button type="button" class="btn-pri" id="prox" aria-label="Próximo passo">Próximo</button>
+  </footer>
+</section>
+
+<!-- EXPLORAR: controles -->
+<section id="controles" class="painel painel-controles" aria-label="Camadas e índices">
+  <div class="folha-alca" aria-hidden="true"></div>
+  <div class="controles-topo"><span>Camadas e índices</span><button type="button" id="fechar-controles">Fechar</button></div>
+  <div class="controles-corpo">
+    <label class="busca">
+      <span class="rotulo-campo">Buscar município</span>
+      <input id="busca" type="search" list="lista-munis" placeholder="ex.: Brumadinho, Marabá" autocomplete="off">
+      <datalist id="lista-munis"></datalist>
+    </label>
+
+    <div class="grupo">
+      <h3>Pintar municípios por</h3>
+      <div class="opcoes" id="opcoes-indice"></div>
+      <div class="legenda" id="legenda"></div>
+    </div>
+
+    <div class="grupo">
+      <h3>Camadas</h3>
+      <div class="opcoes" id="opcoes-camadas"></div>
+    </div>
+
+    <div class="grupo">
+      <h3>Período das ocorrências</h3>
+      <div class="periodo">
+        <select id="ano-ini" aria-label="Ano inicial"></select>
+        <span>até</span>
+        <select id="ano-fim" aria-label="Ano final"></select>
+      </div>
+      <label class="check"><input type="checkbox" id="chk-ilegal"> <span>Incluir garimpo e mineração ilegal <em>(fora do escopo por ora)</em></span></label>
+    </div>
+    <p class="nota">Clique num município ou num ponto para abrir a ficha. Cada registro leva ao link da fonte.</p>
+  </div>
+</section>
+
+<!-- EXPLORAR: gaveta da ficha e das perguntas -->
+<section id="gaveta" class="painel painel-gaveta" aria-label="Ficha e perguntas">
+  <div class="folha-alca" aria-hidden="true"></div>
+  <div class="gaveta-abas" role="tablist">
+    <button type="button" role="tab" data-aba="ficha" class="ativo">Ficha</button>
+    <button type="button" role="tab" data-aba="pergunte">Pergunte ao radar</button>
+    <button type="button" class="fechar" id="fechar-gaveta" aria-label="Fechar">Fechar</button>
+  </div>
+  <div class="gaveta-corpo">
+    <div id="aba-ficha" class="aba ativa">
+      <div id="ficha" class="ficha"><p class="vazio">Toque num município ou num ponto do mapa para ver a ficha.</p></div>
+    </div>
+    <div id="aba-pergunte" class="aba">
+      <div id="conversa" class="conversa"></div>
+      <div class="sugestoes" id="sugestoes"></div>
+      <form id="form-pergunta" class="form-pergunta">
+        <input id="pergunta" type="text" placeholder="Pergunte sobre um município, empresa, lente ou fonte" autocomplete="off" enterkeyhint="send">
+        <button type="submit" class="btn-pri">Perguntar</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- EXPLORAR: barra do celular -->
+<nav class="barra-celular" aria-label="Atalhos">
+  <button type="button" data-abrir="controles">Camadas</button>
+  <button type="button" data-abrir="ficha">Ficha</button>
+  <button type="button" data-abrir="pergunte">Pergunte</button>
+</nav>
+<button type="button" class="btn-flutuante" id="btn-pergunte" data-abrir="pergunte">Pergunte ao radar</button>
+
+<div id="carregando" class="carregando"><div><span class="marca-sinal grande"></span><p>Carregando o radar…</p></div></div>
+
+<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
